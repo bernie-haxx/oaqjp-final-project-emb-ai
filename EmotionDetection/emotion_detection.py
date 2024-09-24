@@ -32,17 +32,27 @@ def emotion_detector(text_to_analyze):
 
     # Creating a new dictionary to save the emotions and dominant_emotion
     emotion_dict = {}
-
-    # loop through assigning the keys
-    for emotion, emotion_value in emotions.items():
-        emotion_dict[emotion] = float(emotion_value)
     
-    # getting the dominant emotion using the max and zip function
-    # looking through all the keys in the dictionary emotion_dict through the use of zip
-    # Selecting the second value which is representing the key
-    dominant_emotion = max(zip(emotion_dict.values(), emotion_dict.keys()))[1]
+    
+    if response.status_code == 200:
+        for emotion, emotion_value in emotions.items():
+            emotion_dict[emotion] = float(emotion_value)
+        
+        # getting the dominant emotion using the max and zip function
+        # looking through all the keys in the dictionary emotion_dict through the use of zip
+        # Selecting the second value which is representing the key
+        dominant_emotion = max(zip(emotion_dict.values(), emotion_dict.keys()))[1]
+        emotion_dict['dominant_emotion'] = dominant_emotion
+
+    elif response.status_code == 400:
+        for emotion, emotion_value in emotions.items():
+            emotion_dict[emotion] = None
+
+        ## Dominant_emotion is NONE during the 400 code error
+        dominant_emotion = None
+        emotion_dict['dominant_emotion'] = dominant_emotion
+    
 
     # Add the dominant emotion to the emotion_dict
-    emotion_dict['dominant_emotion'] = dominant_emotion
-
+    
     return emotion_dict
